@@ -16,3 +16,4 @@ def calculate_angle(a,b,c):
 def calculate_and_append_angle(body_part_1, body_part_2, body_part_3, angle_list):
     angle = calculate_angle(body_part_1, body_part_2, body_part_3)
     angle_list.append(angle)
+    return angle
