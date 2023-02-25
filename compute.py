@@ -20,15 +20,14 @@ def compute(vid_path, base_directory, vid_type):
     cap = cv2.VideoCapture(vid_path)
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    count = 0
-    percentage = 0
+    # count = 0
 
     # Setup mediapipe instance
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         df = pd.DataFrame(columns=['time', 'left_elbow', 'right_elbow', 'left_shoulder', 'right_shoulder',
                           'left_knee', 'right_knee', 'left_hip', 'right_hip', 'left_wrist', 'right_wrist'])
 
-        start_time = time.time() + 1
+        start_time = time.time()
         left_elbow_angle_list = []
         right_elbow_angle_list = []
         left_knee_angle_list = []
@@ -168,21 +167,17 @@ def compute(vid_path, base_directory, vid_type):
                 right_wrist_angle_list, RW_avg_angle = calculate_and_print_average_angle(
                     right_wrist_angle_list, "RIGHT_WRIST_ANGLE")
 
-                start_time = time.time()
-                temp = create_dataframe(count, LE_avg_angle, RE_avg_angle, LS_avg_angle, RS_avg_angle, LK_avg_angle,
+                # start_time = time.time()
+                temp = create_dataframe(start_time, LE_avg_angle, RE_avg_angle, LS_avg_angle, RS_avg_angle, LK_avg_angle,
                                         RK_avg_angle, LH_avg_angle, RH_avg_angle, LW_avg_angle, RW_avg_angle)
 
-                t2 = sum([LE_avg_angle, RE_avg_angle, LS_avg_angle, RS_avg_angle, LK_avg_angle,
-                         RK_avg_angle, LH_avg_angle, RH_avg_angle, LW_avg_angle, RW_avg_angle])/10.0
-
-                percentage += t2
-
+                
                 df = pd.concat([df, temp])
 
                 save_data(image, base_directory, count, vid_type)
 
-                start_time += 2
-                count += 1
+                start_time += 1
+                # count += 1
 
             # cv2.imshow('Mediapipe Feed', image)
 
