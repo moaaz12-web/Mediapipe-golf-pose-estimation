@@ -44,16 +44,18 @@ def compute(vid_path, base_directory, vid_type):
             if not ret:
                 break
 
-            # Recolor image to RGB
-            image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            image.flags.writeable = False
+            # # Recolor image to RGB
+            
+            # image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            # image.flags.writeable = False
 
             # Make detection
             results = pose.process(image)
 
             # Recolor back to BGR
-            image.flags.writeable = True
-            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+            # image.flags.writeable = True
+            # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
             # Extract landmarks
             try:
@@ -171,13 +173,8 @@ def compute(vid_path, base_directory, vid_type):
                 temp = create_dataframe(start_time, LE_avg_angle, RE_avg_angle, LS_avg_angle, RS_avg_angle, LK_avg_angle,
                                         RK_avg_angle, LH_avg_angle, RH_avg_angle, LW_avg_angle, RW_avg_angle)
 
-                
-                df = pd.concat([df, temp])
-
                 save_data(image, base_directory, count, vid_type)
-
                 start_time += 1
-                # count += 1
 
             # cv2.imshow('Mediapipe Feed', image)
 
@@ -186,7 +183,7 @@ def compute(vid_path, base_directory, vid_type):
 
         cap.release()
         cv2.destroyAllWindows()
-        return df
+        return pd.concat([df, temp])
 
 
 
