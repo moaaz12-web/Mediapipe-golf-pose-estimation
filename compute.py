@@ -186,10 +186,7 @@ def compute(vid_path, base_directory, vid_type):
 
         cap.release()
         cv2.destroyAllWindows()
-
-        percentage /= count
-
-        return df, percentage
+        return df
 
 
 
