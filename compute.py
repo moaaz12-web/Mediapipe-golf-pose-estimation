@@ -1,4 +1,3 @@
-
 import mediapipe as mp
 import numpy as np
 import cv2
@@ -28,6 +27,7 @@ def compute(vid_path, base_directory, vid_type, framework_length_seconds):
 
         start_time = time.time()
         count = 0
+        max_seconds_to_save = 30  
 
         left_elbow_angle_list = []
         right_elbow_angle_list = []
@@ -147,7 +147,7 @@ def compute(vid_path, base_directory, vid_type, framework_length_seconds):
 
             # Render detections
             elapsed_time = time.time() - start_time
-            if elapsed_time >= framework_length_seconds:
+            if elapsed_time >= 1.0:
 
                 left_elbow_angle_list, LE_avg_angle = calculate_and_print_average_angle(
                     left_elbow_angle_list, "LEFT_ELBOW_ANGLE")
@@ -174,9 +174,15 @@ def compute(vid_path, base_directory, vid_type, framework_length_seconds):
                 temp = create_dataframe(start_time, LE_avg_angle, RE_avg_angle, LS_avg_angle, RS_avg_angle, LK_avg_angle,
                                         RK_avg_angle, LH_avg_angle, RH_avg_angle, LW_avg_angle, RW_avg_angle)
 
-                save_data(image, base_directory, count, vid_type)
-                count+=1
-                start_time += framework_length_seconds
+                # Save the frame with annotated landmarks
+                if count < max_seconds_to_save:
+                    save_data(image, base_directory, count, vid_type)
+
+                # Increment the count
+                count += 1
+
+                # Update the start time for the next second
+                start_time += 1.0
 
 
             # cv2.imshow('Mediapipe Feed', image)
